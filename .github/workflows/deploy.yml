@@ -28,3 +28,30 @@ jobs:
           aws_region: ${{ secrets.AWS_REGION }}
           function_name: raptor
           zip_file: lambda/build/distributions/lambda.zip
+
+  deploy-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Authenticate package registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+      - name: Get tag
+        run: echo "BUILD_TAG=$(git describe --tags)" >> $GITHUB_ENV
+
+      - name: Build and tag image
+        run: docker build -f server/Dockerfile -t ghcr.io/dellisd/api.derekellis.ca:${BUILD_TAG} -t ghcr.io/dellisd/api.derekellis.ca:dev .
+      - name: Push image
+        if: success()
+        run: docker push --all-tags ghcr.io/dellisd/pantograph
+
+      - name: Deploy
+        uses: wshihadeh/docker-deployment-action@v1
+        with:
+          remote_docker_host: ${{ secrets.REMOTE_HOST }}
+          ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+          deploy_path: ${{ secrets.DOCKER_DEPLOY_PATH }}
+          deployment_mode: docker-swarm
