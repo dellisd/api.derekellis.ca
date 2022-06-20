@@ -45,7 +45,7 @@ jobs:
         run: docker build -f server/Dockerfile -t ghcr.io/dellisd/api.derekellis.ca:${BUILD_TAG} -t ghcr.io/dellisd/api.derekellis.ca:dev .
       - name: Push image
         if: success()
-        run: docker push --all-tags ghcr.io/dellisd/pantograph
+        run: docker push --all-tags ghcr.io/dellisd/api.derekellis.ca
 
       - name: Deploy
         uses: wshihadeh/docker-deployment-action@v1
