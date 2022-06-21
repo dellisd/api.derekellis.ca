@@ -4,6 +4,7 @@ plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.ksp)
   alias(libs.plugins.shadow)
+  application
 }
 
 group = "ca.derekellis.api"
@@ -32,4 +33,8 @@ kotlin {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions.freeCompilerArgs += "-Xcontext-receivers"
+}
+
+application {
+  mainClass.set("ca.derekellis.api.server.MainKt")
 }

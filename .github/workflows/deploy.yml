@@ -55,4 +55,5 @@ jobs:
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.DOCKER_DEPLOY_PATH }}
-            docker stack deploy -c docker-compose.yaml api
+            docker pull ghcr.io/dellisd/api.derekellis.ca:dev
+            docker stack deploy -c ${{ secrets.DOCKER_DEPLOY_PATH }}/docker-compose.yaml api
