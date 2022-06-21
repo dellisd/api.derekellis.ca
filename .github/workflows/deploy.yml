@@ -48,11 +48,11 @@ jobs:
         run: docker push --all-tags ghcr.io/dellisd/api.derekellis.ca
 
       - name: Deploy
-        uses: wshihadeh/docker-deployment-action@v1
+        uses: appleboy/ssh-action@master
         with:
-          remote_docker_host: ${{ secrets.REMOTE_HOST }}
-          ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
-          deploy_path: ${{ secrets.DOCKER_DEPLOY_PATH }}
-          deployment_mode: docker-swarm
-          args: api
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          script:
+            cd ${{ secrets.DOCKER_DEPLOY_PATH }}
+            docker stack deploy -c docker-compose.yaml api
