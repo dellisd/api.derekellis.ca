@@ -55,3 +55,4 @@ jobs:
           ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           deploy_path: ${{ secrets.DOCKER_DEPLOY_PATH }}
           deployment_mode: docker-swarm
+          args: api
