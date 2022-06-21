@@ -21,6 +21,13 @@ dependencies {
   implementation(libs.kotlinx.serialization.json)
 }
 
+tasks.create<Copy>("unzipData") {
+  val zipFile = file("$projectDir/assets/data.zip")
+
+  from(zipTree(zipFile))
+  into(file("$projectDir/src/main/resources"))
+}
+
 tasks.create<Zip>("buildZip") {
   from(tasks.getByName("compileKotlin"))
   from(tasks.getByName("processResources"))
@@ -28,4 +35,6 @@ tasks.create<Zip>("buildZip") {
   into("lib") {
     from(configurations.runtimeClasspath)
   }
+
+  dependsOn("unzipData")
 }
