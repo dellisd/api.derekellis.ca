@@ -54,6 +54,5 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.DOCKER_DEPLOY_PATH }}
             docker pull ghcr.io/dellisd/api.derekellis.ca:dev
-            docker stack deploy -c ${{ secrets.DOCKER_DEPLOY_PATH }}/docker-compose.yaml api
+            docker stack deploy -c /opt/api/docker-compose.yaml api
