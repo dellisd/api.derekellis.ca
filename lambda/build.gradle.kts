@@ -38,3 +38,5 @@ tasks.create<Zip>("buildZip") {
 
   dependsOn("unzipData")
 }
+
+tasks.getByName("processResources").dependsOn("unzipData")
