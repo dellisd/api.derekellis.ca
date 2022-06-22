@@ -1,9 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
+import kotlin.requireNotNull
 
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.ksp)
   alias(libs.plugins.shadow)
+  alias(libs.plugins.buildconfig)
   application
 }
 
@@ -15,10 +18,10 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.ktor.server.core)
-  implementation(libs.ktor.server.netty)
   implementation(libs.inject.runtime)
   implementation(libs.logback)
+  implementation(libs.bundles.ktor.server)
+  implementation(libs.bundles.ktor.client)
 
   ksp(libs.inject.compiler)
 }
@@ -37,4 +40,13 @@ tasks.withType<KotlinCompile> {
 
 application {
   mainClass.set("ca.derekellis.api.server.MainKt")
+}
+
+
+buildConfig {
+  val props = file("$rootDir/local.properties").takeIf { it.exists() }?.let { Properties().apply { load(it.reader()) } }
+  requireNotNull(props) { "local.properties file not found" }
+
+  className("ServerConfig")
+  buildConfigField("String", "LAMBDA_ENDPOINT", "\"${props.getProperty("LAMBDA_ENDPOINT", "")}\"")
 }

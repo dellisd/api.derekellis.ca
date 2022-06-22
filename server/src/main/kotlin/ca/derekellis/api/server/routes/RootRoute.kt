@@ -7,12 +7,10 @@ import io.ktor.server.routing.get
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class RootRoute {
+class RootRoute : RoutingContainer {
 
   context(Routing)
-  fun route() {
-    get("/") {
-      call.respond("Hello World!")
-    }
+  override fun route() = get("/") {
+    call.respond("Hello World!")
   }
 }
