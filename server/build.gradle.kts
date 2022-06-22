@@ -45,7 +45,10 @@ application {
 
 buildConfig {
   val props = file("$rootDir/local.properties").takeIf { it.exists() }?.let { Properties().apply { load(it.reader()) } }
-  requireNotNull(props) { "local.properties file not found" }
+  if(props == null) {
+    logger.warn("local.properties file not found")
+    return@buildConfig
+  }
 
   className("ServerConfig")
   buildConfigField("String", "LAMBDA_ENDPOINT", "\"${props.getProperty("LAMBDA_ENDPOINT", "")}\"")
