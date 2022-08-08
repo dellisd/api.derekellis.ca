@@ -1,4 +1,4 @@
-package ca.derekellis.api.lambda.models
+package ca.derekellis.api.models
 
 import kotlinx.serialization.Serializable
 
