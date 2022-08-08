@@ -4,6 +4,7 @@ import kotlin.requireNotNull
 
 plugins {
   alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.ksp)
   alias(libs.plugins.shadow)
   alias(libs.plugins.buildconfig)
@@ -15,6 +16,8 @@ group = "ca.derekellis.api"
 repositories {
   google()
   mavenCentral()
+  maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/")
+  maven(url = "https://repo.kotlin.link")
 }
 
 dependencies {
@@ -22,6 +25,8 @@ dependencies {
   implementation(libs.logback)
   implementation(libs.bundles.ktor.server)
   implementation(libs.bundles.ktor.client)
+  implementation(libs.clikt)
+  implementation(libs.kgtfs.gtfs)
 
   ksp(libs.inject.compiler)
 }
@@ -41,7 +46,6 @@ tasks.withType<KotlinCompile> {
 application {
   mainClass.set("ca.derekellis.api.server.MainKt")
 }
-
 
 buildConfig {
   val props = file("$rootDir/local.properties").takeIf { it.exists() }?.let { Properties().apply { load(it.reader()) } }

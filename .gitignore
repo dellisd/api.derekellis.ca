@@ -39,3 +39,5 @@ bin/
 .DS_Store
 
 local.properties
+
+server/data/
