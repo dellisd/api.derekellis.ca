@@ -17,22 +17,25 @@ data class FrequencyComparisonResponse(
 )
 
 @Serializable
-sealed class Part(
-  open val from: String,
-  open val to: String,
-  open val geometry: Feature?,
-  open val start: LocalTime,
-  open val end: LocalTime,
-) {
+sealed class Part {
+  abstract val from: String
+  abstract val to: String
+  abstract val geometry: Feature?
+  abstract val start: LocalTime
+  abstract val end: LocalTime
+
   @SerialName("transfer")
+  @Serializable
   data class Transfer(
     override val from: String,
     override val to: String,
     override val geometry: Feature?,
     override val start: LocalTime,
     override val end: LocalTime,
-  ) : Part(from, to, geometry, start, end)
+  ) : Part()
 
+  @SerialName("route")
+  @Serializable
   data class Route(
     override val from: String,
     override val to: String,
@@ -42,5 +45,5 @@ sealed class Part(
     val number: String,
     val heading: String,
     val frequency: IntRange,
-  ) : Part(from, to, geometry, start, end)
+  ) : Part()
 }

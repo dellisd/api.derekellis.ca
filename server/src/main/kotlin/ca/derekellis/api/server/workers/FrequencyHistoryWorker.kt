@@ -1,16 +1,9 @@
 package ca.derekellis.api.server.workers
 
-import ca.derekellis.api.models.Journey
-import ca.derekellis.api.models.Leg
-import ca.derekellis.api.models.RaptorResponse
-import ca.derekellis.api.models.RouteLeg
-import ca.derekellis.api.models.TransferLeg
 import ca.derekellis.api.server.di.DataPath
-import ca.derekellis.api.server.models.FrequencyComparisonResponse
 import ca.derekellis.api.server.models.FrequencyEntry
 import ca.derekellis.api.server.models.FrequencyHistoryRequest
 import ca.derekellis.api.server.models.FrequencyHistoryResponse
-import ca.derekellis.api.server.models.Part
 import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.ServiceId
 import ca.derekellis.kgtfs.domain.model.StopId
@@ -19,80 +12,17 @@ import ca.derekellis.kgtfs.domain.model.TripId
 import ca.derekellis.kgtfs.domain.model.toGtfsTime
 import ca.derekellis.kgtfs.dsl.Gtfs
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
-import ca.derekellis.kgtfs.ext.lineStringBetween
-import io.github.dellisd.spatialk.geojson.dsl.feature
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import me.tatarka.inject.annotations.Inject
 import java.time.DayOfWeek
-import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.io.path.div
 
 @Inject
-class FrequencyWorker(val gtfs: Gtfs = TODO(), private val dataPath: DataPath?) {
-
-  suspend fun getComparisonInfo(data: RaptorResponse): FrequencyComparisonResponse {
-    val base = data.base.filter { it.duration < Duration.ofHours(4) }.take(2).map { getJourneyInfo(it) }
-    val double = data.double.filter { it.duration < Duration.ofHours(4) }.take(2).map { getJourneyInfo(it) }
-    return FrequencyComparisonResponse(base, double)
-  }
-
-  private suspend fun getJourneyInfo(journey: Journey): List<Part> = gtfs {
-    journey.legs.map { leg ->
-      when (leg) {
-        is RouteLeg -> leg.map()
-        is TransferLeg -> leg.map()
-      }
-    }
-  }
-
-  context(StaticGtfsScope)
-    private fun RouteLeg.map(): Part {
-    val origin = stops.getById(from)
-    val destination = stops.getById(to)
-
-    val trip = trips.getById(trip)
-
-    // Route number
-    val routeNumber = trip.route.shortName ?: ""
-    val heading = trip.headsign ?: ""
-    // Shape
-    val geometry = trip.shape?.lineStringBetween(origin, destination)
-
-    // TODO: Compute frequency
-    return Part.Route(
-      from.value,
-      to.value,
-      feature(geometry),
-      start.toLocalTime(),
-      end.toLocalTime(),
-      routeNumber,
-      heading,
-      0..0
-    )
-  }
-
-  private fun TransferLeg.map(): Part =
-    Part.Transfer(from.value, to.value, geometry, start.toLocalTime(), end.toLocalTime())
-
-  private fun GtfsTime.toLocalTime(): LocalTime = LocalTime.of(hour, minute, second)
-
-  private val Journey.duration: Duration get() = legs.last().end - legs.first().start
-
-  private val Leg.start: GtfsTime
-    get() = when (this) {
-      is RouteLeg -> this.start
-      is TransferLeg -> this.start
-    }
-
-  private val Leg.end: GtfsTime
-    get() = when (this) {
-      is RouteLeg -> this.end
-      is TransferLeg -> this.end
-    }
+class FrequencyHistoryWorker(private val dataPath: DataPath?) {
 
   suspend fun getFrequencyHistory(request: FrequencyHistoryRequest): FrequencyHistoryResponse = coroutineScope {
     requireNotNull(dataPath) { "Data path must be specified" }
