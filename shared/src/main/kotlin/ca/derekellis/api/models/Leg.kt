@@ -1,4 +1,4 @@
-package ca.derekellis.api.lambda.models
+package ca.derekellis.api.models
 
 import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.StopId

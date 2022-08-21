@@ -29,6 +29,10 @@ dependencies {
   implementation(libs.kgtfs.gtfs)
 
   ksp(libs.inject.compiler)
+
+  implementation(libs.kgtfs.gtfs)
+
+  implementation(project(":shared"))
 }
 
 kotlin {

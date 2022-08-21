@@ -1,7 +1,7 @@
 package ca.derekellis.api.lambda
 
-import ca.derekellis.api.lambda.models.RaptorRequest
-import ca.derekellis.api.lambda.models.RaptorResponse
+import ca.derekellis.api.models.RaptorRequest
+import ca.derekellis.api.models.RaptorResponse
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import kotlinx.coroutines.Dispatchers

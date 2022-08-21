@@ -19,6 +19,7 @@ dependencies {
 
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlinx.serialization.json)
+  implementation(project(":shared"))
 }
 
 tasks.create<Copy>("unzipData") {

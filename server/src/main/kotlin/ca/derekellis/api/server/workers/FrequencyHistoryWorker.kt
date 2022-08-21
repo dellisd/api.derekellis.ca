@@ -22,7 +22,8 @@ import java.time.LocalTime
 import kotlin.io.path.div
 
 @Inject
-class FrequencyWorker(private val dataPath: DataPath?) {
+class FrequencyHistoryWorker(private val dataPath: DataPath?) {
+
   suspend fun getFrequencyHistory(request: FrequencyHistoryRequest): FrequencyHistoryResponse = coroutineScope {
     requireNotNull(dataPath) { "Data path must be specified" }
 
@@ -132,7 +133,7 @@ class FrequencyWorker(private val dataPath: DataPath?) {
   }
 
   /**
-   * 
+   *
    */
   suspend fun getSelectableStops(origin: String) {
 
@@ -146,3 +147,4 @@ class FrequencyWorker(private val dataPath: DataPath?) {
     private val pm10 = LocalTime.of(22, 0).toGtfsTime()
   }
 }
+

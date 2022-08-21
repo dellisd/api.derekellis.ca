@@ -1,9 +1,9 @@
 package ca.derekellis.api.lambda
 
-import ca.derekellis.api.lambda.models.Journey
-import ca.derekellis.api.lambda.models.RaptorRequest
-import ca.derekellis.api.lambda.models.RouteLeg
-import ca.derekellis.api.lambda.models.TransferLeg
+import ca.derekellis.api.models.Journey
+import ca.derekellis.api.models.RaptorRequest
+import ca.derekellis.api.models.RouteLeg
+import ca.derekellis.api.models.TransferLeg
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.raptor.Raptor
 import ca.derekellis.kgtfs.raptor.providers.InMemoryProvider
