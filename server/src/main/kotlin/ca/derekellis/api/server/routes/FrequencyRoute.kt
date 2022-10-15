@@ -7,6 +7,7 @@ import ca.derekellis.api.server.workers.FrequencyHistoryWorker
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -29,6 +30,9 @@ class FrequencyRoute(
   private val comparisonWorker: FrequencyComparisonWorker
 ) : RoutingContainer {
   private val client: HttpClient = HttpClient(engine) {
+    install(HttpTimeout) {
+      requestTimeoutMillis = 30000
+    }
     install(ContentNegotiation) {
       json()
     }

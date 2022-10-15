@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.7.0"
-ktor = "2.0.2"
+ktor = "2.1.2"
 inject = "0.4.1"
 kmath = "0.3.0"
 
