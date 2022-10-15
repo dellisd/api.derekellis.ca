@@ -35,7 +35,7 @@ class RaptorHandler : RequestStreamHandler {
 
     val result = runBlocking(Dispatchers.Default) {
       val base = launchAsyncJourney(Path("./base.db"), request)
-      val double = launchAsyncJourney(Path("./double.db"), request)
+      val double = launchAsyncJourney(Path("./doubled.db"), request)
 
       RaptorResponse(base.await(), double.await())
     }
