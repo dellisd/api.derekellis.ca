@@ -8,6 +8,7 @@ import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.raptor.Raptor
 import ca.derekellis.kgtfs.raptor.providers.InMemoryProvider
 import org.slf4j.LoggerFactory
+import java.nio.file.Path
 import java.time.Duration
 import java.time.LocalDate
 import ca.derekellis.kgtfs.raptor.models.RouteLeg as RaptorRouteLeg
@@ -15,13 +16,13 @@ import ca.derekellis.kgtfs.raptor.models.TransferLeg as RaptorTransferLeg
 
 private val DATE = LocalDate.of(2022, 5, 17)
 
-suspend fun journey(path: String, request: RaptorRequest): List<Journey> {
+suspend fun journey(path: Path, request: RaptorRequest): List<Journey> {
   val logger = LoggerFactory.getLogger("journey")
   requireNotNull(request.origin) { "Origin can not be null" }
   requireNotNull(request.destination) { "Destination can not be null" }
   requireNotNull(request.time) { "Time can not be null" }
 
-  val provider = InMemoryProvider.fromCache(path, DATE)
+  val provider = InMemoryProvider.fromCache(path.toString(), DATE)
   logger.info("Loaded memory cache")
   val raptor = Raptor(provider)
 
