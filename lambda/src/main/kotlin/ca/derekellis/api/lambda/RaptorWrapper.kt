@@ -14,7 +14,7 @@ import java.time.LocalDate
 import ca.derekellis.kgtfs.raptor.models.RouteLeg as RaptorRouteLeg
 import ca.derekellis.kgtfs.raptor.models.TransferLeg as RaptorTransferLeg
 
-private val DATE = LocalDate.of(2022, 5, 17)
+private val DATE = LocalDate.of(2022, 10, 5)
 
 suspend fun journey(path: Path, request: RaptorRequest): List<Journey> {
   val logger = LoggerFactory.getLogger("journey")
